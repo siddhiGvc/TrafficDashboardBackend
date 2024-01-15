@@ -28,21 +28,21 @@ const parseInternal = (payload, mqttClient,topic) => {
         //if (!/^\d+$/.test(parts[0])) return;
 
         // 211023 added code for detecting machine packets ie *SSN,12345# sent to GVC/VM/#
-        // if (parts[0] == 'SSN'){
-        //     var from = topic.replace('GVC/VM/','');
-        //     console.log('From -',from,'  To -',parts[1]); 
-        //     // Transaction.create({
-        //     //     machine: from,
-        //     //     command: parts[0],
-        //     //     p1: parts[1],
-        //     // }) 
-        //     return;
-        //     }  
+        if (parts[0] == 'SSN'){
+            var from = topic.replace('GVC/VM/','');
+            console.log('From -',from,'  To -',parts[1]); 
+            // Transaction.create({
+            //     machine: from,
+            //     command: parts[0],
+            //     p1: parts[1],
+            // }) 
+            return;
+            }  
             // console.log(payload);
-            if(parts[1]=="SUM")
+            if(parts[1]=="TL")
             {
 
-                events.pubsub.emit('searchByDeviceId','search',payload,parts[0]);
+                events.pubsub.emit('searchByDeviceId','search',parts[0],parts);
             }
 
             if (parts[1] == 'STA')

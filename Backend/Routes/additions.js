@@ -1,6 +1,8 @@
 const express=require('express');
 const saveLogin=require('../Controllers/additions/loginLogs');
-const serachDevice=require('../Controllers/additions/trafficLights')
+const {serachDevice,updateStatus}=require('../Controllers/additions/trafficLights')
+
+const auth=require('../Middleware/apiAuth');
 const router = express.Router();
 
 
@@ -8,9 +10,9 @@ const router = express.Router();
 
 
 
-
-router.post('/savelogin',saveLogin.saveLogin);
-router.post('/getloginfo',saveLogin.getLogInfo);
-router.post('/searchDevice',serachDevice)
+router.post('/savelogin',auth,saveLogin.saveLogin);
+router.post('/getloginfo',auth,saveLogin.getLogInfo);
+router.post('/searchDevice',auth,serachDevice);
+router.post('/updateStatus',auth,updateStatus);
 
 module.exports=router;
