@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     R8SEC:DataTypes.STRING,
     R8OVE:DataTypes.STRING,
     R8PED:DataTypes.STRING,
+    isOnline: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     
   }, {
     tableName: 'CurrentStatus',

@@ -34,7 +34,7 @@ var currentDateTime = Date();
 }
  const saveLogin=async(req,res)=>{
     try{
-        // console.log("Saving Login Info")
+        console.log("Saving Login Info")
         // console.log(req.body.userName);
         // console.log(req.body.lat);
         // console.log(req.body.long);

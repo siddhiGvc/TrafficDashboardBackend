@@ -1,4 +1,4 @@
-
+const { Master, CurrentStatus, sequelize,numberPlate}=require('../Models')
 var events = require('./events');
 //a
 const num = a => {
@@ -42,7 +42,14 @@ const parseInternal = (payload, mqttClient,topic) => {
             if(parts[1]=="TL")
             {
 
-                events.pubsub.emit('searchByDeviceId','search',parts[0],parts);
+
+                reset_statusOfTrafficLights(parts,parts[0]);
+                // events.pubsub.emit('searchByDeviceId','search',parts[0],parts);
+            }
+            if(parts[1]=="PL")
+            {
+                reset_statusOfNumberPlate(parts[0])
+                // events.pubsub.emit('numberPlate',parts[0]);
             }
 
             if (parts[1] == 'STA')
@@ -63,3 +70,67 @@ const parseInternal = (payload, mqttClient,topic) => {
 }
 
 
+async function reset_statusOfTrafficLights(status, serial) {
+   try{
+     console.log("started function");
+    const Device=await Master.findOne({where:{UID:serial}});
+    const recordToUpdate = await CurrentStatus.findOne({ where: {UID:serial } });
+    
+    if (recordToUpdate) {
+      // Update the properties of the record
+
+      var Roads=Device.Roads;
+      for (var i = 0; i < Roads; i++) {
+        await sequelize.query(
+          `UPDATE CurrentStatus
+           SET  R${i + 1}PRI = :status,
+                isOnline=1
+           WHERE UID = :serial`,
+          {
+            replacements: {
+        
+              status: status[i + 2],
+              serial: serial,
+            },
+            type: sequelize.QueryTypes.UPDATE,
+          }
+        );
+      }
+   
+     
+    }
+
+   }
+   catch(err){
+       console.log("Error updaing record :"+err)
+   }
+}
+
+
+async function reset_statusOfNumberPlate(number) {
+    try{
+   
+         await sequelize.query(
+           `UPDATE NumberPlates
+            SET  number = :serial,
+                 isOnline=1
+            WHERE id= 1`,
+           {
+             replacements: {
+         
+              
+               serial: number,
+             },
+             type: sequelize.QueryTypes.UPDATE,
+           }
+         );
+       
+    
+      
+     
+ 
+    }
+    catch(err){
+        console.log("Error updaing record :"+err)
+    }
+ }
