@@ -48,7 +48,7 @@ const getAllTrafficLights=async(req,res)=>{
 
 const getByUID=async(req,res)=>{
     try{
-        console.log(req.body);
+        // console.log(req.body);
         const data=await Master.findOne({where:{UID:req.body.Uid}});
         res.status(200).json(data);
        
@@ -99,7 +99,7 @@ const serachDevice = async (req, res) => {
 
 const updateStatus=async(req,res)=>{
     try{
-        console.log(req.body);
+        // console.log(req.body);
         var message="*"+req.body['status[serial]']+",TL,"+req.body['status[1]']+','+req.body['status[2]']+','+req.body['status[3]']+','+req.body['status[4]']+','+req.body['status[5]']+','+req.body['status[6]']+','+req.body['status[7]']+','+req.body['status[8]']+"#";
      
         mqttClient.sendMessage('GVC/VM/TRAFFIC' ,message);

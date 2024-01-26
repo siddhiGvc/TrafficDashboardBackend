@@ -1,3 +1,4 @@
+const { NOW } = require('sequelize');
 const { Master, CurrentStatus, sequelize,numberPlate}=require('../Models')
 var events = require('./events');
 //a
@@ -82,13 +83,13 @@ async function reset_statusOfTrafficLights(status, serial) {
       var Roads=Device.Roads;
       for (var i = 0; i < Roads; i++) {
         await sequelize.query(
-          `UPDATE CurrentStatus
+          `UPDATE currentstatus
            SET  R${i + 1}PRI = :status,
-                isOnline=1
+           lastHeartbeatTime = NOW()
            WHERE UID = :serial`,
           {
             replacements: {
-        
+              
               status: status[i + 2],
               serial: serial,
             },

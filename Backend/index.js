@@ -19,7 +19,7 @@ const errorHandler=require('./Middleware/errorHandler');
 const Routes=require('./Routes/additions.js');
 const MqttHandler=require('./mqtt.js');
 const mqttClient=new MqttHandler();
-const nodeSchedule=require('./nodeSchedule.js')
+
 var app = express();
 
 // app.use(logger('dev'));
@@ -50,7 +50,7 @@ app.listen(PORT,()=>{
   
     console.log(`Server listening ont ${PORT}`);
     mqttClient.connect(); 
-    nodeSchedule(); 
+    
 })
 
 
