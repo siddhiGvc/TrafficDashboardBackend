@@ -10,7 +10,7 @@ var mqttClient = new mqttHandler();
 const addTrafficLights=async(req,res)=>{
     try{
 
-        console.log(req.body);
+      
         const data=await Master.create({
             UID:req.body.Uid,
             City:req.body.City,
@@ -58,6 +58,8 @@ const getByUID=async(req,res)=>{
 
     }
 }
+
+
 
 
 
@@ -123,4 +125,26 @@ const numberPlate=async(req,res)=>{
     }
 }
 
-module.exports={serachDevice,updateStatus,addTrafficLights,getAllTrafficLights,getByUID,numberPlate}
+const deleteDevice= async (req, res) => {
+    try {
+      
+      const device = await Master.findOne({
+        where: { id: req.query.id },
+      });
+      const device1 = await CurrentStatus.findOne({
+        where: { id: req.query.id },
+      });
+      if (!device || !device1) {
+        throw new Error(`Device doesn't exist`);
+      }
+  
+      await device.destroy({ where: { id: req.query.id } });
+      await device1.destroy({ where: { id: req.query.id } });
+      return successResponse(req, res, {});
+    } catch (error) {
+      return errorResponse(req, res, error.message);
+    }
+  };
+  
+
+module.exports={serachDevice,updateStatus,addTrafficLights,getAllTrafficLights,getByUID,numberPlate,deleteDevice}
