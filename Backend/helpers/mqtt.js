@@ -83,7 +83,7 @@ async function reset_statusOfTrafficLights(status, serial) {
       var Roads=Device.Roads;
       for (var i = 0; i < Roads; i++) {
         await sequelize.query(
-          `UPDATE currentstatus
+          `UPDATE CurrentStatus
            SET  R${i + 1}PRI = :status,
            lastHeartbeatTime = NOW()
            WHERE UID = :serial`,

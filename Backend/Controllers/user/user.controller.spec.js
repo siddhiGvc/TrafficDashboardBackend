@@ -3,7 +3,7 @@ const { allUsers }=reuire('./user.controller');
 
 const { successResponse }=require('../../helpers');
 
-const { User } =require('../../Models');
+const {trafficUsers ,sequelize} =require('../../Models');
 // mock success and error function mock
 jest.mock('./../../helpers');
 
@@ -16,7 +16,7 @@ describe('User controller', () => {
     // so we don't have to be dependant on database
     // resolve data that you want return from database in Promise.resolve
     const spyUserFindAndCountAll = jest
-      .spyOn(User, 'findAndCountAll')
+      .spyOn(trafficUsers , 'findAndCountAll')
       .mockImplementation(() => Promise.resolve([]));
 
     // create request object and put value that you required to check in function

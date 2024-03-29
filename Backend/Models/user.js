@@ -1,8 +1,8 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    'User',
+  const trafficUsers = sequelize.define(
+    'trafficUsers',
     {
       name: {
         type: DataTypes.STRING,
@@ -14,19 +14,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      // verifyToken: {
-      //   type: DataTypes.STRING,
-      //   defaultValue: null,
-      // },
-      // isVerified: {
-      //   type: DataTypes.BOOLEAN,
-      //   defaultValue: false,
-      // },
+      verifyToken: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
+      isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     
    
     },
@@ -41,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   );
-  User.associate = function (models) {
+  trafficUsers.associate = function (models) {
     // associations can be defined here
   };
-  return User;
+  return trafficUsers;
 };

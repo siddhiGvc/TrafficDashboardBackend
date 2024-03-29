@@ -3,18 +3,18 @@
 
 module.exports = {
     up: (queryInterface, Sequelize) => Promise.all([
-      queryInterface.addColumn('Users', 'verifyToken', {
+      queryInterface.addColumn('trafficUsers', 'verifyToken', {
         type: Sequelize.STRING,
         defaultValue: null,
       }),
-      queryInterface.addColumn('Users', 'isVerified', {
+      queryInterface.addColumn('trafficUsers', 'isVerified', {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       }),
     ]),
   
     down: (queryInterface, Sequelize) => Promise.all([
-      queryInterface.removeColumn('Users', 'verifyToken'),
-      queryInterface.removeColumn('Users', 'isVerified'),
+      queryInterface.removeColumn('trafficUsers', 'verifyToken'),
+      queryInterface.removeColumn('trafficUsers', 'isVerified'),
     ]),
   };

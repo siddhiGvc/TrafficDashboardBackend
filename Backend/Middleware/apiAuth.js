@@ -1,5 +1,5 @@
 const{ errorResponse }= require('../helpers');
-const{ User } =require('../Models');
+const{ trafficUsers } =require('../Models');
 
 const jwt = require('jsonwebtoken');
 
@@ -11,7 +11,7 @@ const apiAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.SECRET);
     req.user = decoded.user;
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.findOne({
       where: { email: req.user.email },
     });
     if (!user) {

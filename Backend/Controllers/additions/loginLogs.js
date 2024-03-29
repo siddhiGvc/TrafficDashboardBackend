@@ -1,4 +1,4 @@
-const { sequelize, loginLogs }= require('../../Models');
+const { sequelize, trafficloginLogs }= require('../../Models');
 const dotenv=require('dotenv');
 const { successResponse, errorResponse, uniqueId }=require('../../helpers');
 const { Op } = require("sequelize");
@@ -16,7 +16,7 @@ var currentDateTime = Date();
         const endDate = req.body.endDate;
         console.log(startDate,endDate);
  
-        const obj = await loginLogs.findAll({
+        const obj = await trafficloginLogs.findAll({
             where: {
                 createdAt: { [Op.between]: [req.body.startDate, moment(req.body.endDate).add(1, 'day')] }
               },
@@ -39,7 +39,7 @@ var currentDateTime = Date();
         // console.log(req.body.lat);
         // console.log(req.body.long);
         // console.log(currentDateTime);
-        loginLogs.create({
+        trafficloginLogs.create({
             userName: req.body.userName,
             loginLat: req.body.lat || "99.99",
             loginLong: req.body.long || "99.99",

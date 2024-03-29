@@ -1,14 +1,14 @@
 const jwt=require('jsonwebtoken');
 const crypto=require('crypto');
 const axios=require('axios');
-const { User } =require('../../Models');
+const { trafficUsers  } =require('../../Models');
 const { successResponse, errorResponse, uniqueId } =require('../../helpers');
 
  const allUsers = async (req, res) => {
   try {
     const page = req.params.page || 1;
     const limit = 2;
-    const users = await User.findAndCountAll({
+    const users = await trafficUsers.scope('withSecretColumns').findAndCountAll({
       order: [['createdAt', 'DESC'], ['firstName', 'ASC']],
       offset: (page - 1) * limit,
       limit,
@@ -20,7 +20,7 @@ const { successResponse, errorResponse, uniqueId } =require('../../helpers');
 };
  const get = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await trafficUsers.scope('withSecretColumns').findAll();
     return successResponse(req, res, { users });
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -53,7 +53,7 @@ const { successResponse, errorResponse, uniqueId } =require('../../helpers');
       }
     }
 
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { email },
     });
     if (user) {
@@ -72,7 +72,7 @@ const { successResponse, errorResponse, uniqueId } =require('../../helpers');
       verifyToken: uniqueId(),
     };
 
-    const newUser = await User.create(payload);
+    const newUser = await trafficUsers.create(payload);
     return successResponse(req, res, {});
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -82,9 +82,10 @@ const { successResponse, errorResponse, uniqueId } =require('../../helpers');
 const login = async (req, res) => {
   try {
   
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { email: req.body.email },
     });
+    // console.log(user)
     if (!user) {
       throw new Error('Incorrect Email Id/Password');
     }
@@ -92,9 +93,12 @@ const login = async (req, res) => {
       .createHash('sha256')
       .update(req.body.password || '')
       .digest('hex');
-    if (reqPass.toLowerCase() !== user.password.toLowerCase()) {
-      throw new Error('Incorrect Email Id/Password');
-    }
+      // console.log("pass",reqPass);
+      // console.log( user.password)
+      if (reqPass.toLowerCase() !== user.password.toLowerCase()) {
+
+        throw new Error('Incorrect Email Id/Password');
+      }
     const token = jwt.sign(
       {
         user: {
@@ -113,7 +117,7 @@ const login = async (req, res) => {
 };
  const tokenLogin = async (req, res) => {
   try {
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { verifyToken: req.query.token },
     });
     if (!user) {
@@ -138,7 +142,7 @@ const login = async (req, res) => {
  const profile = async (req, res) => {
   try {
     const { userId } = req.user;
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await trafficUsers.scope('withSecretColumns').findOne({ where: { id: userId } });
     return successResponse(req, res, { user });
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -148,7 +152,7 @@ const login = async (req, res) => {
  const changePassword1 = async (req, res) => {
   try {
     const { userId } = req.user;
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { id: userId },
     });
 
@@ -175,7 +179,7 @@ const login = async (req, res) => {
  const changeUserPassword = async (req, res) => {
   try {
     const { id } = req.body;
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { id: id },
     });
 
@@ -198,7 +202,7 @@ const login = async (req, res) => {
       email, password, name,  isAdmin, 
     } = req.body;
 
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { email },
     });
     if (user) {
@@ -218,7 +222,7 @@ const login = async (req, res) => {
       isVerified: true,
     };
    console.log(payload);
-    const newUser = await User.create(payload);
+    const newUser = await trafficUsers.create(payload);
     console.log(newUser)
     return successResponse(req, res, {});
   } catch (error) {
@@ -229,14 +233,14 @@ const login = async (req, res) => {
 
  const deleteUser = async (req, res) => {
   try {
-    const user = await User.scope('withSecretColumns').findOne({
+    const user = await trafficUsers.scope('withSecretColumns').findOne({
       where: { id: req.query.id },
     });
     if (!user) {
       throw new Error(`User doesn't exist`);
     }
 
-    await User.destroy({ where: { id: req.query.id } });
+    await trafficUsers.destroy({ where: { id: req.query.id } });
     return successResponse(req, res, {});
   } catch (error) {
     return errorResponse(req, res, error.message);
