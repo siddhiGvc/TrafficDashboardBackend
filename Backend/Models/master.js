@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     Lat:DataTypes.STRING,
     Long:DataTypes.STRING,
     Roads:DataTypes.INTEGER,
+    Address:DataTypes.STRING
   
   }, {
     tableName: 'Master',

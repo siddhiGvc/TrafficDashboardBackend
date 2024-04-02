@@ -3,6 +3,8 @@ const {saveLogin,getLogInfo}=require('../Controllers/additions/loginLogs');
 const {serachDevice,updateStatus,getAllTrafficLights,addTrafficLights,getByUID,numberPlate,deleteDevice}=require('../Controllers/additions/trafficLights')
 
 const auth=require('../Middleware/apiAuth');
+const { getLastUid, saveLastUid } = require('../Controllers/additions/lastSelecteUid');
+const { getCities, getLocations, getUid } = require('../Controllers/additions/trafficLights.data.controller');
 const router = express.Router();
 
 
@@ -20,5 +22,12 @@ router.get('/getAllTrafficLights',auth,getAllTrafficLights);
 
 router.post('/getByUid',auth,getByUID);
 router.get('/getNumber',auth,numberPlate);
+
+router.get('/getLastUid',getLastUid);
+router.post('/saveLastUid',auth,saveLastUid);
+
+router.get('/getCities',getCities);
+router.get('/getLocations',getLocations);
+router.get('/getUid',getUid);
 
 module.exports=router;
