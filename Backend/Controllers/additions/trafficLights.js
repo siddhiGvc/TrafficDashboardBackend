@@ -14,6 +14,7 @@ const addTrafficLights=async(req,res)=>{
         const data=await Master.create({
             UID:req.body.Uid,
             City:req.body.City,
+            State:req.body.State,
             Location:req.body.Location,
             Lat:req.body.Lat,
             Long:req.body.Long,
@@ -21,6 +22,7 @@ const addTrafficLights=async(req,res)=>{
         })
         await CurrentStatus.create({
             UID:req.body.Uid,
+            lastHeartbeatTime:'2024-04-02 19:41:32'
            
         })
         res.status(200).json("Okay");
@@ -41,6 +43,7 @@ const getAllTrafficLights=async(req,res)=>{
        
     }
     catch(err){
+        console.log(err);
         res.status(505).json("Error");
 
     }
