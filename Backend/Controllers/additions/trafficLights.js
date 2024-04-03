@@ -1,6 +1,6 @@
 var events = require('../../helpers/events');
 const { successResponse, errorResponse, uniqueId }=require('../../helpers');
-const { Master,CurrentStatus,NumberPlate}=require('../../Models')
+const { Master,CurrentStatus,NumberPlates}=require('../../Models')
 const mqttHandler=require('../../mqtt');
 
 var mqttClient = new mqttHandler();
@@ -21,6 +21,11 @@ const addTrafficLights=async(req,res)=>{
             Roads:req.body.Roads
         })
         await CurrentStatus.create({
+            UID:req.body.Uid,
+            lastHeartbeatTime:'2024-04-02 19:41:32'
+           
+        })
+        await NumberPlates.create({
             UID:req.body.Uid,
             lastHeartbeatTime:'2024-04-02 19:41:32'
            
@@ -118,9 +123,8 @@ const updateStatus=async(req,res)=>{
 
 const numberPlate=async(req,res)=>{
     try{
-        const data=await NumberPlate.findOne();
+        const data=await NumberPlates.findOne({where:{UID:req.body.deviceId}});
         res.status(200).json(data);
-       
     }
     catch(err){
         res.status(505).json("Error");

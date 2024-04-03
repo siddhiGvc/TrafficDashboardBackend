@@ -1,5 +1,5 @@
 const { NOW } = require('sequelize');
-const { Master, CurrentStatus, sequelize,numberPlate}=require('../Models')
+const { Master, CurrentStatus, sequelize,NumberPlates}=require('../Models')
 var events = require('./events');
 //a
 const num = a => {
@@ -49,7 +49,7 @@ const parseInternal = (payload, mqttClient,topic) => {
             }
             if(parts[1]=="PL")
             {
-                reset_statusOfNumberPlate(parts[0])
+                reset_statusOfNumberPlate(parts,parts[0])
                 // events.pubsub.emit('numberPlate',parts[0]);
             }
 
@@ -108,24 +108,37 @@ async function reset_statusOfTrafficLights(status, serial) {
 }
 
 
-async function reset_statusOfNumberPlate(number) {
+async function reset_statusOfNumberPlate(status, serial) {
     try{
    
-         await sequelize.query(
-           `UPDATE NumberPlates
-            SET  number = :serial,
-                 isOnline=1
-            WHERE id= 1`,
-           {
-             replacements: {
-         
-              
-               serial: number,
-             },
-             type: sequelize.QueryTypes.UPDATE,
-           }
-         );
        
+        console.log("started function");
+        const Device=await Master.findOne({where:{UID:serial}});
+        const recordToUpdate = await NumberPlates.findOne({ where: {UID:serial } });
+        
+        if (recordToUpdate) {
+          // Update the properties of the record
+    
+          var Roads=Device.Roads;
+          for (var i = 0; i < Roads; i++) {
+            await sequelize.query(
+              `UPDATE NumberPlates
+               SET  R${i + 1}PRI = :status,
+               lastHeartbeatTime = NOW()
+               WHERE UID = :serial`,
+              {
+                replacements: {
+                  
+                  status: status[i + 2],
+                  serial: serial,
+                },
+                type: sequelize.QueryTypes.UPDATE,
+              }
+            );
+          }
+       
+         
+        }
     
       
      

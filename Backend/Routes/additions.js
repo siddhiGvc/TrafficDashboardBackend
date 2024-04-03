@@ -21,7 +21,7 @@ router.get('/deleteDevice',auth,deleteDevice);
 router.get('/getAllTrafficLights',auth,getAllTrafficLights);
 
 router.post('/getByUid',auth,getByUID);
-router.get('/getNumber',auth,numberPlate);
+router.post('/getNumberPlates',auth,numberPlate);
 
 router.get('/getLastUid',getLastUid);
 router.post('/saveLastUid',auth,saveLastUid);
