@@ -47,6 +47,22 @@ const parseInternal = (payload, mqttClient,topic) => {
                 reset_statusOfTrafficLights(parts,parts[0]);
                 // events.pubsub.emit('searchByDeviceId','search',parts[0],parts);
             }
+            if(parts[1]=="DOOR")
+            {
+              reset_statusOfDoor(parts[2],parts[0]);
+            }
+            if(parts[1]=="MAN")
+            {
+              if(parts[2]==0)
+              {
+                reset_statusOfAutoManual(parts[2],parts[0])
+              }
+              else{
+                reset_statusOfRemoteLocal(parts[2],parts[0])
+              }
+             
+            }
+          
             if(parts[1]=="PL")
             {
                 reset_statusOfNumberPlate(parts,parts[0])
@@ -147,4 +163,88 @@ async function reset_statusOfNumberPlate(status, serial) {
     catch(err){
         console.log("Error updaing record :"+err)
     }
+ }
+
+ async function reset_statusOfDoor(status,serial){
+  
+  const recordToUpdate = await CurrentStatus.findOne({ where: {UID:serial } });
+  
+  if (recordToUpdate) {
+    // Update the properties of the record
+
+
+   
+      await sequelize.query(
+        `UPDATE CurrentStatus
+         SET 'Door Status' = :status
+         WHERE UID = :serial`,
+        {
+          replacements: {
+            
+            status: status,
+            serial: serial,
+          },
+          type: sequelize.QueryTypes.UPDATE,
+        }
+      );
+    
+ 
+   
+  }
+ }
+
+ async function reset_statusOfAutoManual(status,serial){
+  
+  const recordToUpdate = await CurrentStatus.findOne({ where: {UID:serial } });
+  
+  if (recordToUpdate) {
+    // Update the properties of the record
+
+
+   
+      await sequelize.query(
+        `UPDATE CurrentStatus
+         SET 'Auto/Maunal' = :status
+         WHERE UID = :serial`,
+        {
+          replacements: {
+            
+            status: status,
+            serial: serial,
+          },
+          type: sequelize.QueryTypes.UPDATE,
+        }
+      );
+    
+ 
+   
+  }
+ }
+
+ async function reset_statusOfRemoteLocal(status,serial){
+  
+  const recordToUpdate = await CurrentStatus.findOne({ where: {UID:serial } });
+  
+  if (recordToUpdate) {
+    // Update the properties of the record
+
+
+   
+      await sequelize.query(
+        `UPDATE CurrentStatus
+         SET 'Local/Remote' = :status
+         WHERE UID = :serial`,
+        {
+          replacements: {
+            
+            status: status,
+            serial: serial,
+          },
+          type: sequelize.QueryTypes.UPDATE,
+        }
+      );
+    
+ 
+   
+  }
  }

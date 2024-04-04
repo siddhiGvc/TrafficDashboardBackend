@@ -34,7 +34,11 @@ module.exports = (sequelize, DataTypes) => {
     R8SEC:DataTypes.STRING,
     R8OVE:DataTypes.STRING,
     R8PED:DataTypes.STRING,
+    'Auto/Maunal':DataTypes.BOOLEAN,
+    'Local/Remote':DataTypes.BOOLEAN,
+    'Door Status':DataTypes.STRING,
     lastHeartbeatTime: DataTypes.DATE,
+  
     
   }, {
     tableName: 'CurrentStatus',
