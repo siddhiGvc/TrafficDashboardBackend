@@ -152,6 +152,20 @@ const deleteDevice= async (req, res) => {
       return errorResponse(req, res, error.message);
     }
   };
+
+  const pressButton=async(req,res)=>{
+    try {
+        var UserName=req.body.UserName;
+        var ButtonName=req.body.ButtonName;
+        console.log(UserName,ButtonName);
+        var message="*"+"MAN"+","+UserName+","+ButtonName+"#";
+        mqttClient.sendMessage('GVC/VM/#' + message);
+        return successResponse(req, res, {});
+      } catch (error) {
+        return errorResponse(req, res, error.message);
+      }
+
+  }
   
 
-module.exports={serachDevice,updateStatus,addTrafficLights,getAllTrafficLights,getByUID,numberPlate,deleteDevice}
+module.exports={serachDevice,updateStatus,addTrafficLights,getAllTrafficLights,getByUID,numberPlate,deleteDevice,pressButton}

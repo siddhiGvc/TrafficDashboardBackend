@@ -16,6 +16,26 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      City: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      Location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      UID: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      clientName: {
+        type: DataTypes.STRING,
+      
+      },
+      superAdmin: {
+        type: DataTypes.STRING,
+      
+      },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

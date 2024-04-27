@@ -112,6 +112,7 @@ const login = async (req, res) => {
     delete user.dataValues.password;
     return successResponse(req, res, { user, token });
   } catch (error) {
+    console.log(error);
     return errorResponse(req, res, error.message);
   }
 };
@@ -169,7 +170,7 @@ const login = async (req, res) => {
       .update(req.body.newPassword)
       .digest('hex');
 
-    await User.update({ password: newPass }, { where: { id: user.id } });
+    await trafficUsers.update({ password: newPass }, { where: { id: user.id } });
     return successResponse(req, res, {});
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -188,7 +189,7 @@ const login = async (req, res) => {
       .update(req.body.password)
       .digest('hex');
 
-    await User.update({ password: newPass }, { where: { id: user.id } });
+    await trafficUsers.update({ password: newPass }, { where: { id: user.id } });
     return successResponse(req, res, {});
   } catch (error) {
     return errorResponse(req, res, error.message);
@@ -199,7 +200,7 @@ const login = async (req, res) => {
   try {
     console.log(req.body);
     const {
-      email, password, name,  isAdmin, 
+      email, password, name, City, Location, UID, isAdmin, clientName
     } = req.body;
 
     const user = await trafficUsers.scope('withSecretColumns').findOne({
@@ -215,9 +216,11 @@ const login = async (req, res) => {
     const payload = {
       email,
       name,
-   
+      City,
+      Location,
+      UID,
       isAdmin,
-    
+      clientName,
       password: reqPass,
       isVerified: true,
     };

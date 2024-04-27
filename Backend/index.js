@@ -12,7 +12,7 @@ const PORT=process.env.PORT || 443;
  const publicRoutes=require('./Routes/public');
 const apiRoutes=require('./Routes/api');
 const adminRoutes=require('./Routes/admin');
-
+const batteryRouter=require('./Routes/BatteryMonitorRoutes/batteries.js')
 const apiMiddleware=require('./Middleware/apiAuth');
 const adminMiddleware=require('./Middleware/adminAuth');
 const errorHandler=require('./Middleware/errorHandler');
@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
   app.use('/api/admin',apiMiddleware,adminMiddleware,adminRoutes);
   app.use('/pub', publicRoutes);
   app.use('/add',Routes);
+  app.use('/batteryMonitor',batteryRouter);
   app.get('/', (req, res) => res.send('Ok'));
  
 

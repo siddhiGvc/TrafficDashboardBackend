@@ -27,6 +27,18 @@ const parseInternal = (payload, mqttClient,topic) => {
         var parts = cleaned.split(',');
         // 211023 - ignore test with numeric number, allow commands in parts[0] 
         //if (!/^\d+$/.test(parts[0])) return;
+        if(parts[1]=="BAT")
+        {
+            batteryTransactions.create({
+                DeviceId:parts[0],
+                Voltage:parts[2],
+                Current : parts[3],
+                Temperature:parts[4]
+    
+            })
+
+            queryforBattery({ lastOnTime: 'NOW()', lastHeartbeatTime: 'NOW()' }, parts[0]);
+        }
 
         // 211023 added code for detecting machine packets ie *SSN,12345# sent to GVC/VM/#
         if (parts[0] == 'SSN'){
@@ -248,3 +260,15 @@ async function reset_statusOfNumberPlate(status, serial) {
    
   }
  }
+
+
+ function queryforBattery(values, serial) {
+  console.log("batterySerial",serial)
+  var parts = Object.keys(values).map(k => `${k} = ${values[k]}`).join(', ');
+  sequelize.query(`
+      update batteriesData set ${parts} where device_number = '${serial}'
+             
+  `).catch(function (ex) {
+      console.log('Error', ex);
+  });
+}
