@@ -48,8 +48,9 @@ const { Master, CurrentStatus, sequelize,numberPlate}=require('../../Models')
       uid:req.query.uid.split(','),
     } });
     const [obj, metadata] = await sequelize.query(`
-      select a.*, b.* from TrafficLightColors a
+      select a.*, b.*,c.* from TrafficLightColors a
       left join TrafficLight_summary b on a.Junction = b.Junction
+      left join InverterStaus c on a.Junction = c.Junction
       where 1=1
  
       ${replObjG.City ? ` and b.City in (:city)` : ''}
