@@ -1,6 +1,6 @@
 var events = require('../../helpers/events');
 const { successResponse, errorResponse, uniqueId }=require('../../helpers');
-const { Master,CurrentStatus,NumberPlates}=require('../../Models')
+const { TrafficLightDevices,CurrentStatus,NumberPlates,TrafficLightColors,InverterStaus}=require('../../Models')
 const mqttHandler=require('../../mqtt');
 
 var mqttClient = new mqttHandler();
@@ -11,22 +11,21 @@ const addTrafficLights=async(req,res)=>{
     try{
 
       
-        const data=await Master.create({
-            UID:req.body.Uid,
+        const data=await TrafficLightDevices.create({
+            Junction:req.body.Uid,
             City:req.body.City,
-            State:req.body.State,
-            Location:req.body.Location,
+            zone:req.body.Location,
             Lat:req.body.Lat,
             Long:req.body.Long,
-            Roads:req.body.Roads
+            
         })
-        await CurrentStatus.create({
-            UID:req.body.Uid,
+        await TrafficLightColors.create({
+            Junction:req.body.Uid,
             lastHeartbeatTime:'2024-04-02 19:41:32'
            
         })
-        await NumberPlates.create({
-            UID:req.body.Uid,
+        await InverterStaus.create({
+            Junction:req.body.Uid,
             lastHeartbeatTime:'2024-04-02 19:41:32'
            
         })
@@ -42,7 +41,7 @@ const addTrafficLights=async(req,res)=>{
 const getAllTrafficLights=async(req,res)=>{
     try{
 
-        const data=await Master.findAll();
+        const data=await TrafficLightDevices.findAll();
         // console.log(data);
         return successResponse(req, res, { data });   
        

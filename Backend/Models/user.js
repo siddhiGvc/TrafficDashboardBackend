@@ -20,14 +20,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      Location: {
+      zone: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      UID: {
+      ward: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      beat: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+  
       clientName: {
         type: DataTypes.STRING,
       

@@ -4,7 +4,7 @@ const {serachDevice,updateStatus,getAllTrafficLights,addTrafficLights,getByUID,n
 
 const auth=require('../Middleware/apiAuth');
 const { getLastUid, saveLastUid } = require('../Controllers/additions/lastSelecteUid');
-const { getCities, getLocations, getUid, getData } = require('../Controllers/additions/trafficLights.data.controller');
+const { getCities, getLocations, getUid, getData,getBeats } = require('../Controllers/additions/trafficLights.data.controller');
 const router = express.Router();
 
 
@@ -29,6 +29,7 @@ router.post('/saveLastUid',auth,saveLastUid);
 router.get('/getCities',getCities);
 router.get('/getLocations',getLocations);
 router.get('/getUid',getUid);
+router.get('/getBeats',getBeats);
 router.get('/getData',auth,getData);
 
 router.post('/pressButton',pressButton);
