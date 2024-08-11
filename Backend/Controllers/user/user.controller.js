@@ -200,7 +200,7 @@ const login = async (req, res) => {
   try {
     console.log(req.body);
     const {
-      email, password, name, City, Location, UID, isAdmin, clientName
+      email, password, name, city, zone, ward, beat, isAdmin, clientName
     } = req.body;
 
     const user = await trafficUsers.scope('withSecretColumns').findOne({
@@ -216,9 +216,10 @@ const login = async (req, res) => {
     const payload = {
       email,
       name,
-      City,
-      Location,
-      UID,
+      City:city,
+      zone,
+      ward,
+      beat,
       isAdmin,
       clientName,
       password: reqPass,
