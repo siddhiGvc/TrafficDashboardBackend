@@ -34,40 +34,50 @@ const { Master, CurrentStatus, sequelize,numberPlate}=require('../../Models')
     // var replObj = { machine_status: req.query.status.split(',') };
     // if (req.query.stock_status) replObj['stock_status'] = req.query.stock_status.split(',');
     // if (req.query.burn_status) replObj['burn_status'] = req.query.burn_status.split(',');
-    const [objAll, _metadata] = await sequelize.query(`
-      select a.*, b.* from TrafficLightColors a
-      left join TrafficLight_summary b on a.Junction = b.Junction
-      where 1=1
-      ${replObjG.City ? ` and b.City in (:city)` : ''}
-      ${replObjG.Location ? ` and b.zone in (:location)` : ''}
-      ${replObjG.UID ? ` and b.ward in (:uid)` : ''}
-   
-    `, { replacements:{
-      city: req.query.city.split(','),
-      location:req.query.location.split(','),
-      uid:req.query.uid.split(','),
-    } });
-    const [obj, metadata] = await sequelize.query(`
-      select a.*, b.*,c.* from TrafficLightColors a
-      left join TrafficLight_summary b on a.Junction = b.Junction
-      left join InverterStaus c on a.Junction = c.Junction
-      where 1=1
- 
-      ${replObjG.City ? ` and b.City in (:city)` : ''}
-      ${replObjG.Location ? ` and b.zone in (:location)` : ''}
-      ${replObjG.UID ? ` and b.ward in (:uid)` : ''}
-      ${replObjG.machine_status ? ` and b.light_status in (:machine_status)` : ''}
-      ${replObjG.inverter_status ? ` and b.inverter_status in (:inverter_status)` : ''}
-   
-  `, {
-    replacements:{
-      city: req.query.city.split(','),
-      location:req.query.location.split(','),
-      uid:req.query.uid.split(','),
-      machine_status:req.query.status.split(','),
-      inverter_status:req.query.inverter_status.split(',')
-    }
-  });
+    const replacements = {};
+
+if (req.query.city) {
+  replacements.city = req.query.city.split(',');
+}
+
+if (req.query.location) {
+  replacements.location = req.query.location.split(',');
+}
+
+if (req.query.uid) {
+  replacements.uid = req.query.uid.split(',');
+}
+
+if (req.query.status) {
+  replacements.machine_status = req.query.status.split(',');
+}
+
+if (req.query.inverter_status) {
+  replacements.inverter_status = req.query.inverter_status.split(',');
+}
+
+const [objAll, _metadata] = await sequelize.query(`
+  SELECT a.*, b.* 
+  FROM TrafficLightColors a
+  LEFT JOIN TrafficLight_summary b ON a.Junction = b.Junction
+  WHERE 1=1
+  ${req.query.city ? ` AND b.City IN (:city)` : ''}
+  ${req.query.location ? ` AND b.zone IN (:location)` : ''}
+  ${req.query.uid ? ` AND b.ward IN (:uid)` : ''}
+`, { replacements });
+
+const [obj, metadata] = await sequelize.query(`
+  SELECT a.*, b.*, c.* 
+  FROM TrafficLightColors a
+  LEFT JOIN TrafficLight_summary b ON a.Junction = b.Junction
+  LEFT JOIN InverterStaus c ON a.Junction = c.Junction
+  WHERE 1=1
+  ${replObjG.City ? ` AND b.City IN (:city)` : ''}
+  ${replObjG.Location ? ` AND b.zone IN (:location)` : ''}
+  ${replObjG.UID ? ` AND b.ward IN (:uid)` : ''}
+  ${replObjG.machine_status ? ` AND b.light_status IN (:machine_status)` : ''}
+  ${replObjG.inverter_status ? ` AND b.inverter_status IN (:inverter_status)` : ''}
+`, { replacements });
     // console.log(obj,objAll)
     return successResponse(req, res, { data: obj || [], dataAll: objAll || [] });
   } catch (error) {

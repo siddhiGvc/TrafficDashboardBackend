@@ -10,15 +10,20 @@ var mqttClient = new mqttHandler();
 const addTrafficLights=async(req,res)=>{
     try{
 
-      
+        console.log(req.body);
         const data=await TrafficLightDevices.create({
             Junction:req.body.Uid,
             City:req.body.City,
             zone:req.body.Location,
+            ward:req.body.ward,
+            beat:req.body.beat,
             Lat:req.body.Lat,
             Long:req.body.Long,
+            Address:req.body.address
             
         })
+
+        console.log(data);
         await TrafficLightColors.create({
             Junction:req.body.Uid,
             lastHeartbeatTime:'2024-04-02 19:41:32'
@@ -33,6 +38,7 @@ const addTrafficLights=async(req,res)=>{
        
     }
     catch(err){
+        console.log(err);
         res.status(505).json("Error");
 
     }
