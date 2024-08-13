@@ -17,7 +17,9 @@ const apiMiddleware=require('./Middleware/apiAuth');
 const adminMiddleware=require('./Middleware/adminAuth');
 const errorHandler=require('./Middleware/errorHandler');
 const Routes=require('./Routes/additions.js');
-const trafficRouter=require('./Routes/trafficLight.js')
+const trafficRouter=require('./Routes/trafficLight.js');
+const customerRouter=require("./Routes/customer.js");
+
 const MqttHandler=require('./mqtt.js');
 const mqttClient=new MqttHandler();
 
@@ -44,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
   app.use('/add',Routes);
   app.use('/batteryMonitor',batteryRouter);
   app.use('/trafficLights',trafficRouter);
+  app.use('/customers',customerRouter);
   app.get('/', (req, res) => res.send('Ok'));
  
 
