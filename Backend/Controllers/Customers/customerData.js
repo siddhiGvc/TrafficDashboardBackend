@@ -1,4 +1,4 @@
-const { sequelize,CustomerData} =require('../../Models');
+const { sequelize,TrafficCustomerData} =require('../../Models');
 const dotenv =require('dotenv');
 const { successResponse, errorResponse, uniqueId } =require('../../helpers');
 const { Op } = require("sequelize");
@@ -8,11 +8,11 @@ dotenv.config();
  const updateCustomerData=async(req,res)=>{
     try{
 
-        const data=await CustomerData.findOne({where:{id:req.query.id}});
+        const data=await TrafficCustomerData.findOne({where:{id:req.query.id}});
         if(data)
         {
             await sequelize.query(
-                `UPDATE CustomerData
+                `UPDATE TrafficCustomerData
                  SET \`CustomerName\`=:Customer,
                      \`CInfo1\`=:City1,
                      \`CInfo2\`=:City2,
@@ -51,7 +51,7 @@ dotenv.config();
  const postCustomerData=async(req,res)=>{
     try{
 
-        await CustomerData.create({
+        await TrafficCustomerData.create({
             CustomerName:req.body.CustomerName,
             CInfo1:req.body.CInfo1,
             CInfo2:req.body.CInfo2,
@@ -77,7 +77,7 @@ dotenv.config();
     try{
     
       
-        const obj = await CustomerData.findAll();
+        const obj = await TrafficCustomerData.findAll();
          res.status(200).json({data:obj})
 
     }
@@ -93,7 +93,7 @@ dotenv.config();
     try{
     
       
-        const obj = await CustomerData.findAll({where:{CustomerName:req.body.clientName}});
+        const obj = await TrafficCustomerData.findAll({where:{CustomerName:req.body.clientName}});
          res.status(200).json({data:obj})
 
     }
@@ -108,7 +108,7 @@ dotenv.config();
 const deleteById = async (req, res) => {
     try {
     
-      await CustomerData.destroy({ where: { id: req.query.id } });
+      await TrafficCustomerData.destroy({ where: { id: req.query.id } });
       return successResponse(req, res, {});
     } catch (error) {
       return errorResponse(req, res, error.message);
