@@ -44,6 +44,9 @@ var currentDateTime = Date();
             loginLat: req.body.lat || "99.99",
             loginLong: req.body.long || "99.99",
             LoggedInTill: currentDateTime,
+            deviceModel: req.body.deviceModel,
+            Remark:req.body.Remark,
+            MachineNumber:req.body.MachineNumber
         }) 
         res.status(200).json("okay");
     }
